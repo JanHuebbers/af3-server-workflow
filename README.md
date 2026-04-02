@@ -307,56 +307,58 @@ python src/_054_mergemerge_plots.py Mergemerge${MERGENAME}
 ---
 ## IV Align R plots
 Use `align_rds_plots.R` to align the panel and axes of multiple ggplot objects saved as `.rds` files.
-Usage
 ```bash
 Rscript ./src/R/align_rds_plots.R <rds_dir> [width_cm] [height_cm]
 ```
-`<rds_dir>`: directory containing the `.rds` plots
-`[width_cm]` and `[height_cm]` are optional overrides
-Examples
+- `<rds_dir>`: directory containing the `.rds` plots
+- `[width_cm]` and `[height_cm]` are optional overrides
+### Examples
 Use script defaults:
 ```bash
-Rscript ./src/R/align_rds_plots.R ./Mergemerge/AtMLOvsAtEXO70/AlignHeat_sims/MLOs
+Rscript ./src/R/align_rds_plots.R ./Mergemerge/MyMerge/AlignHeat_sims/ChainA
 ```
 Force all plots to `10 × 6` cm:
 ```bash
-Rscript ./src/R/align_rds_plots.R ./Merge/3AtMpHvMLO/2025-12-09/align_0097 10.0 6.0
+Rscript ./src/R/align_rds_plots.R ./Merge/MyMerge/2026-01-01/ 10.0 6.0
 ```
 Keep per-plot widths, but force height to `6` cm:
 ```bash
-Rscript ./src/R/align_rds_plots.R ./Merge/1MLOvsH4/2025-12-12/ NA 6.0
+Rscript ./src/R/align_rds_plots.R ./Merge/MyMerge/2026-01-01/ NA 6.0
 ```
-How width and height are chosen
-For each plot, the script computes size in this order per dimension:
-Per-plot default based on the file name
-If no rule matches, global fallback = `16 × 6` cm
-If a CLI value is given:
-numeric → override for all plots
-`NA` → no override
-What it does
-loads all `.rds` files in `<rds_dir>` that are ggplot objects
-calls `align_plots(data = plots, align = "hv", axis = "ytbr", greedy = TRUE)` once on the full set
-writes aligned plots to `<rds_dir>/aligned/` as:
-one `<stem>_aligned.rds` per input plot
-one `<stem>_aligned.svg` per input plot
+**For each plot, the script computes size in this order per dimension:**
+- Per-plot default based on the file name
+- If no rule matches, global fallback = `16 × 6` cm
+- If a CLI value is given:
+- numeric → override for all plots
+- `NA` → no override
+
+**What it does**
+- Loads all `.rds` files in `<rds_dir>` that are ggplot objects
+- Calls `align_plots(data = plots, align = "hv", axis = "ytbr", greedy = TRUE)` once on the full set
+- Writes aligned plots to `<rds_dir>/aligned/` as:
+  - one `<stem>_aligned.rds` per input plot
+  - one `<stem>_aligned.svg` per input plot
+
 The aligned SVGs have matching panel and axis geometry, so they can be combined cleanly in Inkscape, Illustrator, or PowerPoint.
-Typical workflow
-Set up the environment
-Prepare `af3_input.xlsx`
-Create or update the matching YAML config
-Generate AF3 JSON input files
-Submit jobs to your AF3 execution backend
-Copy returned AF3 outputs into `AF3_output/`
-Run module 2 for metrics and structure visualization
-Run module 3 for plots
-Run module 4 to compare runs
-Optionally use module 6 to align exported ggplots
-Status
-Module 1: active
-Module 2: active
-Module 3: under construction
-Module 4: active
-Module 5: under construction
-Module 6: active
+
+# Typical workflow
+- Set up the environment
+- Prepare `af3_input.xlsx`
+- Create or update the matching YAML config
+- Generate AF3 JSON input files
+- Submit jobs to your AF3 execution backend
+- Copy returned AF3 outputs into `AF3_output/`
+- Run module 2 for metrics and structure visualization
+- Run module 3 for plots
+- Run module 4 to compare runs
+- Run module 5 to compare merged runs
+- Optionally use module 6 to align exported ggplot objects
+# Status
+- Module 1: active
+- Module 2: active
+- Module 3: active
+- Module 4: active
+- Module 5: under construction
+- Module 6: active
 
 
