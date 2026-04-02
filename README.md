@@ -152,11 +152,11 @@ sudo fc-cache -f -v
 ```
 # Workflow modules
 ## I Excel to JSON
-Activate the Conda environment:
+### Activate the Conda environment:
 ```bash
 conda activate af3_env
 ```
-1.1 Prepare your input sheet in your Excel input file (`af3_input.xlsx`)
+### Prepare your input sheet in your Excel input file (`af3_input.xlsx`)
 - Create a new sheet and update the SimID column and Sheet name
 - Add names for your protein chains to the Chain_name columns
 - Prepare FASTA files for chains and link FASTA files to Chain_seq columns via right click → link
@@ -168,63 +168,60 @@ conda activate af3_env
   - dashes
   - underscores
   - colons
-Batch generation of `.xlsx` input sheets
+### Batch generation of `.xlsx` input sheets
+Modify parameters in _001_batch_excel.yml and execute:
 ```bash
 python src/_001_batch_excel.py
 ```
-Copy sheets from `af3_input_temp.xlsx` to `af3_input.xlsx`.
-1.2 Update `config.yml`
-Rename an existing `config.yml` in `af3_workflow/config` using the name of your input Excel sheet
-Change YAML header and sheet name
-Update output_json directory
-If applicable, change default_ion count or modelSeeds
-Provide the ChimeraX script for structure visualization under cx_script
-Adjust alignment algorithm if necessary
-Adjust height and width for P1 (WiP1 and HiP1)
-Update protein names and x-axis title for P1
-ChimeraX `.cxc` files live under `af3_workflow/ChimeraX/cx_scripts`.
-Batch generation of `.yml` config files
+Afterwards, copy sheets from `af3_input_temp.xlsx` to `af3_input.xlsx`.
+
+### Update `config.yml`
+- Rename an existing `config.yml` in `af3_workflow/config` using the name of your input Excel sheet
+- Change YAML header and sheet name
+- Update output_json directory
+- If applicable, change default_ion count or modelSeeds
+- Provide the ChimeraX script for structure visualization under cx_script. ChimeraX `.cxc` files live under `af3_workflow/ChimeraX/cx_scripts`.
+- Adjust alignment algorithm if necessary
+- Adjust height and width for plotting in module 3 (WiP1 and HiP1)
+- Update protein names and x-axis title for P1
+  
+### Batch generation of `.yml` config files
+Modify parameters in _002_batch_config.yml and execute:
 ```bash
 python src/_002_batch_config.py
 ```
-1.3 Change into the project folder
+### Run module 1
+Change into the project folder
 ```bash
 cd ~/projects/af3_workflow/
 ```
-1.4 Generate JSON, residue map, and alignment for all or single runs
+Generate JSON, residue map, and alignment for all or single runs
 All
 ```bash
 python src/_010_run_create_input.py
 ```
 Single
 ```bash
-python src/_010_run_create_input.py Run0009_2025-06-06_Test
+python src/_010_run_create_input.py Run0001_2026-01-01_test
 ```
 Batch
-Take ownership if applicable:
-```bash
-sudo chown jan:jan src/shell/batch_module1.sh
-```
-Execute from the working directory:
+Modify parameters in batch_module1.sh and execute from the working directory:
 ```bash
 ./src/shell/batch_module1.sh
 ```
-1.5 Verify output
-Check `input/` for the newly created JSON files
-Feed these JSONs into your AF3 batch runner, for example the AlphaFold 3 server
-Download AF3 output, extract files, and copy them into the project folder
+### Verify output
+- Check `input/` for the newly created JSON files
+- Feed these JSONs into your AF3 batch runner, for example the AlphaFold 3 server
+- Download AF3 output, extract files, and copy them into the project folder
+
 Example:
 ```bash
-sudo chown -R jan:jan ./AF3_output/0009
-rsync -a --no-xattrs /mnt/c/Users/Jan/Downloads/folds_2025_06_11_07_58/ ~/projects/af3_workflow/AF3_output/0009/
+sudo chown -R <user>:<user> ./AF3_output/0001
+rsync -a --no-xattrs /mnt/c/Users/User/Downloads/folds_2026_01_01_00_01/ ~/projects/af3-server-workflow/AF3_output/0001/
 ```
 ---
-2. ChimeraX visualization and confidence metric extraction
-2.1 Change into the project folder
-```bash
-cd ~/projects/af3_workflow/
-```
-2.2 Run the wrapper for module 2
+## II ChimeraX visualization and confidence metric extraction
+### Run the wrapper for module 2
 This is exemplary code for test run `0009`.
 ```bash
 python src/_020_run_chimera_confmetr.py Run0009_2025-06-06_Test
