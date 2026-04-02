@@ -30,15 +30,12 @@ End-to-end workflow for preparing AlphaFold 3 server inputs and analyzing return
 - Merge workflows across runs
 - Planned merge-of-merges analysis
 - Alignment of exported ggplot `.rds` files for figure assembly
-  
 # Notes
 - This workflow currently assumes a Linux-style environment.
 - Examples are written for Ubuntu on WSL.
 - ChimeraX paths may need manual adjustment in config/global.yml.
-- Some scripts may require ownership or execution-permission fixes depending on your setup
-  af3-workflow
-
-Repository layout
+- Some scripts may require ownership or execution-permission fixes depending on your setup  
+# Repository layout
 ```text
 af3-server-workflow/
 ├── AF3_output
@@ -58,25 +55,26 @@ af3-server-workflow/
 ├── src
 └── terms_of_use.md
 ```
-Requirements
-System
-Linux environment
-Conda, Miniconda, or Mamba
-Python
-R
-ChimeraX
-`zlib` development headers
-`pkg-config`
-system/compiler toolchain for selected R packages
-Recommended environment
-Ubuntu or Ubuntu via WSL on Windows.
-Installation
+# Requirements
+## System
+- Linux environment
+- Conda, Miniconda, or Mamba
+- Python
+- R 
+- System libraries for R package setup (e.g., cmake, cairo, pkg-config)
+- System/compiler toolchain for selected R packages
+- ChimeraX (1.10.1)
+
+Recommended environment: Ubuntu or Ubuntu via WSL on Windows.
+
+# Installation
 1. Clone the repository
 ```bash
 git clone <your-repository-url>
-cd af3-workflow
+cd af3-server-workflow
 ```
 2. Configure Conda channels
+To avoid version conflicts when installing R, compilers, and Bioconductor packages:
 ```bash
 conda config --add channels conda-forge
 conda config --set channel_priority strict
@@ -106,8 +104,12 @@ conda install -c conda-forge gemmi
 R-related system dependencies
 ```bash
 sudo apt update
-sudo apt install zlib1g-dev
-sudo apt install pkg-config
+sudo apt install -y \
+  cmake \
+  libudunits2-dev \
+  libcairo2-dev \
+  libexpat1-dev \
+  pkg-confi
 ```
 Compilers for R packages
 ```bash
@@ -129,21 +131,25 @@ chmod +x setup_af3_folders.sh
 8. Verify ChimeraX accessibility
 Example for WSL:
 ```bash
-/mnt/c/Program\ Files/ChimeraX\ 1.9/bin/ChimeraX-console.exe --version
-```
-or
-```bash
-"/mnt/c/Program Files/ChimeraX 1.9/bin/ChimeraX-console.exe" --version
+"/mnt/c/Program Files/ChimeraX 1.10.1/bin/ChimeraX-console.exe" --version
 ```
 Add the correct ChimeraX path to `./config/global.yml`.
-9. Verify installation
+9. Fonts on WSL
+For the plotting scripts to render correctly, the DejaVu Sans `.ttf` files must be available inside WSL under:
 ```bash
-which python
-python --version
-R --version
-Rscript -e "library(msa); print('msa loaded successfully')"
+/usr/share/fonts/truetype/dejavu/
 ```
-Quick start
+At minimum, these files should be present:
+- DejaVuSans.ttf
+- DejaVuSans-Bold.ttf
+- DejaVuSans-Oblique.ttf
+- DejaVuSans-BoldOblique.ttf
+If the files are missing, copy them into WSL and refresh the font cache:
+```bash
+sudo mkdir -p /usr/share/fonts/truetype/dejavu
+sudo fc-cache -f -v
+```
+# Quick start
 ```bash
 conda activate af3_env
 cd ~/projects/af3_workflow/
@@ -384,20 +390,5 @@ Module 3: under construction
 Module 4: active
 Module 5: under construction
 Module 6: active
-Notes
-This workflow currently assumes a Linux-style environment
-Some examples are written for Ubuntu on WSL
-ChimeraX paths may need manual adjustment in `config/global.yml`
-Some scripts may require ownership or execution-permission fixes depending on your setup
-License
-Add your preferred license here, for example:
-```text
-MIT License
-```
-or
-```text
-GNU General Public License v3.0
-```
-Contact
-Maintainer: Jan Hübbers  
-Add contact details or institutional affiliation here if desired.
+
+
