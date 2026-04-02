@@ -19,7 +19,7 @@ Workflow modules
 Typical workflow
 Status
 
-#Overview
+# Overview
 `af3-server-workflow` is a modular pipeline for preparing AlphaFold 3 jobs, processing returned predictions, extracting and visualizing confidence metrics, and comparing results across multiple runs or merged simulation sets. It is designed for Linux environments and works especially well with Ubuntu or Ubuntu via WSL on Windows.
 # Features
 - Excel-based preparation of AF3 input definitions
