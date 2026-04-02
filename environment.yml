@@ -1,0 +1,44 @@
+name: af3_env
+channels:
+  - conda-forge
+  - bioconda
+  - defaults
+
+dependencies:
+  # Core language versions
+  - python=3.10.16
+  - r-base=4.4.3
+
+  # Python libraries (Conda)
+  - pandas
+  - openpyxl
+  - numpy
+  - matplotlib
+  - seaborn
+  - pyyaml
+  - xlsxwriter     # required for excel heat maps
+  - gemmi          # required for mmCIF
+
+  # R libraries (Conda)
+  - r-essentials   # includes tidyverse, devtools, Rcpp, etc.
+  - r-biocmanager  # enables Bioconductor install from within R
+  - r-devtools
+  - r-nloptr       # required for lme4
+  - r-lme4         # required for pbkrtest
+  - r-pbkrtest     # required for car
+  - r-car          # required for rstatix
+  - r-ggstar
+  - r-svglite
+  - r-showtext
+
+  # System libraries
+  - zlib           # required for installing R packages
+  - pkg-config
+
+  # Allow pip installs for packages not in Conda
+  - pip
+
+  # pip-only packages
+  - pip:
+    - biopython
+    - hydride
