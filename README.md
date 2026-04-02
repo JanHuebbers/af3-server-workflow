@@ -44,16 +44,13 @@ af3-server-workflow/
 ├── Mergemerge
 ├── Metrics_plots
 ├── README.md
-├── Rplots.pdf
 ├── af3_input.xlsx
-├── af3_input_temp.xlsx
 ├── config
 ├── environment.yml
 ├── input
 ├── sequences
 ├── setup_af3_folders.sh
-├── src
-└── terms_of_use.md
+└── src
 ```
 # Requirements
 ## System
@@ -222,53 +219,53 @@ rsync -a --no-xattrs /mnt/c/Users/User/Downloads/folds_2026_01_01_00_01/ ~/proje
 ---
 ## II ChimeraX visualization and confidence metric extraction
 ### Run the wrapper for module 2
-This is exemplary code for test run `0009`.
+This is exemplary code for test run `0001`.
 ```bash
-python src/_020_run_chimera_confmetr.py Run0009_2025-06-06_Test
+python src/_020_run_chimera_confmetr.py Run0001_2026-01-01_test
 ```
-Useful flags:
-`--avg-only` to skip writing heavy per-model `ContactProbs` and `PAE` sheets
-`--yes` to answer all prompts with `y`
+**Useful flags:**
+- `--avg-only` to skip writing heavy per-model `ContactProbs` and `PAE` sheets
+- `--yes` to answer all prompts with `y`
 ---
-3. Confidence metric visualization via R
-This module is under construction.
-3.1 Run the wrapper for module 3
+## III Confidence metric visualization via R
+### Run the wrapper for module 3
 ```bash
-python src/_030_run_plot_module.py Run0009_2025-06-06_Test
+python src/_030_run_plot_module.py Run0001_2026-01-01_test
 ```
 ---
-4. Merge simulations
-4.0 Wrapper
+## IV Merge simulations
+### Run the wrapper
 Runs all scripts in module 4. Use `--yes` to skip prompts.
 ```bash
-export MERGENAME=AtMLO4MLO6ICswap
+export MERGENAME=MyMerge
 python src/_040_run_merge_module.py Merge${MERGENAME} --yes
 ```
-4.1 Merge MSAs
+### Run step-wise
+#### Merge MSAs
 Builds a merged multiple sequence alignment (MSA) per chain across selected `run_id`s and writes an alignment map.
 ```bash
 python src/_041_merge_MSA.py Merge${MERGENAME}
 ```
-4.2 Merge confidence metrics `.csv` files from AF3 output folders
+#### Merge confidence metrics `.csv` files from AF3 output folders
 ```bash
 python src/_042_merge_GlobalMetr.py Merge${MERGENAME}
 ```
-4.3 Merge per-residue metrics `.xlsx` files from AF3 output folders
+#### Merge per-residue metrics `.xlsx` files from AF3 output folders
 Creates a merged `minScoresperMSA_merged.xlsx` for the merge, where each run contributes one column set per chain containing mean per-residue metrics averaged across seeds/jobs within that run.
 ```bash
 python src/_043_merge_MinMetr.py Merge${MERGENAME}
 ```
-4.4 Create plots to compare metrics across various runs
+#### Create plots to compare metrics across various runs
 ```bash
 python src/_044_create_merge_plots.py Merge${MERGENAME}
 ```
-4.5 Selection by `--include`
-Include-only mode is controlled by the boolean CLI flag `--include`.
-When `--include` is set, the script only keeps rows belonging to the specified `include` jobs. If you list models for a given `job_id`, it keeps only those model indices. If a `job_id` has no models specified, all models for that job are included.
+### Selection by `--include`
+- Include-only mode is controlled by the boolean CLI flag `--include`.
+- When `--include` is set, the script only keeps rows belonging to the specified `include` jobs. If you list models for a given `job_id`, it keeps only those model indices. If a `job_id` has no models specified, all models for that job are included.
 ```bash
-python src/_042_merge_GlobalMetr.py MergeAtMLO2vsAtCML12_fl_dIDR_top --include
+python src/_042_merge_GlobalMetr.py Merge${MERGENAME} --include
 ```
-Config examples
+Config examples for the use of `--include`
 List of dicts:
 ```yaml
 merge_name: "MyMerge"
@@ -289,32 +286,26 @@ include:
   job_id: ["0135-01", "0135-02"]
   model: [[0, 1], []]
 ```
-Usage
-```bash
-python src/_042_merge_GlobalMetr.py MyConfigName --include
-```
-Last call example
-```bash
-python src/_042_merge_GlobalMetr.py MergeAtMLO2vsAtCAM2_fl_dIDR_CBDs_top --include
-python src/_044_create_merge_plots.py MergeAtMLO2vsAtCAM2_fl_dIDR_CBDs_top --continue-on-error
-```
 ---
-5. Merge merge
-This module is under construction.
+## V Merge merge (under construction)
+Available:
+- Script 052: combine global confidence metrics `.csv` tables
+- Script 054: create visuals to compare these metrics across merged runs
 Planned scripts:
-Script 051: create MSAs across different merges
-Script 052: combine global confidence metrics `.csv` tables
-Script 053: combine per-residue metrics and alignments
-Script 054: create visuals to compare these metrics across merged runs
+- Script 051: create MSAs across different merges
+- Script 053: combine per-residue metrics and alignments
 Examples:
 ```bash
-python src/_052_mergemerge_GlobalMetr.py MergemergeAtMLOvsAtEXO70
+export MERGENAME=MyMergemerge
 ```
 ```bash
-python src/_054_mergemerge_plots.py MergemergeAtMLOvsAtEXO70
+python src/_052_mergemerge_GlobalMetr.py Mergemerge${MERGENAME}
+```
+```bash
+python src/_054_mergemerge_plots.py Mergemerge${MERGENAME}
 ```
 ---
-6. Align R plots
+## IV Align R plots
 Use `align_rds_plots.R` to align the panel and axes of multiple ggplot objects saved as `.rds` files.
 Usage
 ```bash
