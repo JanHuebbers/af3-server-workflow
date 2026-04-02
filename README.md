@@ -1,14 +1,14 @@
 End-to-end workflow for preparing AlphaFold 3 server inputs and analyzing returned structures, confidence metrics, and for carrying out comparative merges of selected prediction runs.
 
 # Table of contents
-Overview
-Features
-Notes
-Repository layout
-Requirements
-Installation
-Quick start
-Workflow modules
+- Overview
+- Features
+- Notes
+- Repository layout
+- Requirements
+- Installation
+- Quick start
+- Workflow modules
 0. Setup
 1. Excel to JSON
 2. ChimeraX visualization and confidence metric extraction
