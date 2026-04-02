@@ -9,13 +9,12 @@ End-to-end workflow for preparing AlphaFold 3 server inputs and analyzing return
 - Installation
 - Quick start
 - Workflow modules
-0. Setup
-1. Excel to JSON
-2. ChimeraX visualization and confidence metric extraction
-3. Confidence metric visualization via R
-4. Merge simulations
-5. Merge merge
-6. Align R plots
+  1. AF3 server input generation
+  2. ChimeraX visualization and confidence metric extraction
+  3. Confidence metric visualization via R
+  4. Merge simulations
+  5. Merge merge
+  6. Align R plots
 Typical workflow
 Status
 
@@ -41,17 +40,23 @@ Status
 
 Repository layout
 ```text
-af3-workflow/
-├── config/                  # YAML configuration files
-├── input/                   # Generated AF3 JSON input files
-├── AF3_output/              # AF3 output folders
-├── ChimeraX/                # ChimeraX scripts and resources
-├── src/                     # Python pipeline scripts
-│   ├── R/                   # R helper and plotting scripts
-│   └── shell/               # Shell wrappers / batch helpers
-├── environment.yml          # Conda environment definition
-├── setup_af3_folders.sh     # Folder setup helper
-└── README.md
+af3-server-workflow/
+├── AF3_output
+├── ChimeraX
+├── Merge
+├── Mergemerge
+├── Metrics_plots
+├── README.md
+├── Rplots.pdf
+├── af3_input.xlsx
+├── af3_input_temp.xlsx
+├── config
+├── environment.yml
+├── input
+├── sequences
+├── setup_af3_folders.sh
+├── src
+└── terms_of_use.md
 ```
 Requirements
 System
