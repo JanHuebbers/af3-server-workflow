@@ -19,7 +19,7 @@ End-to-end workflow for preparing AlphaFold 3 server inputs and analyzing return
 - Status
 
 # Overview
-`af3-server-workflow` is a modular pipeline for preparing AlphaFold 3 jobs, processing returned predictions, extracting and visualizing confidence metrics, and comparing results across multiple runs or merged simulation sets. It is designed for Linux environments and works especially well with Ubuntu or Ubuntu via WSL on Windows.
+`af3-server-workflow` is a modular pipeline for preparing AlphaFold 3 prediction runs, processing returned predictions, extracting and visualizing confidence metrics, and comparing results across multiple runs or merged simulation sets. It is designed for Ubuntu _via_ WSL on Windows.
 # Features
 - Excel-based preparation of AF3 input definitions
 - JSON generation for AlphaFold 3 submission
@@ -65,7 +65,7 @@ af3-server-workflow/
 - System/compiler toolchain for selected R packages
 - ChimeraX (1.10.1)
 
-Recommended environment: Ubuntu or Ubuntu via WSL on Windows.
+**Recommended environment: Ubuntu or Ubuntu via WSL on Windows.**
 
 # Installation
 1. Clone the repository
@@ -134,6 +134,7 @@ Example for WSL:
 "/mnt/c/Program Files/ChimeraX 1.10.1/bin/ChimeraX-console.exe" --version
 ```
 Add the correct ChimeraX path to `./config/global.yml`.
+
 9. Fonts on WSL
 For the plotting scripts to render correctly, the DejaVu Sans `.ttf` files must be available inside WSL under:
 ```bash
@@ -149,45 +150,24 @@ If the files are missing, copy them into WSL and refresh the font cache:
 sudo mkdir -p /usr/share/fonts/truetype/dejavu
 sudo fc-cache -f -v
 ```
-# Quick start
-```bash
-conda activate af3_env
-cd ~/projects/af3_workflow/
-python src/_010_run_create_input.py
-python src/_020_run_chimera_confmetr.py Run0009_2025-06-06_Test
-python src/_030_run_plot_module.py Run0009_2025-06-06_Test
-```
-Workflow modules
-0. Setup
-Prepare a Linux environment, clone the repository, create the Conda environment, install required tools, and verify that Python, R, and ChimeraX are accessible.
----
-1. Excel to JSON
-1.0 Start Ubuntu
-Start Ubuntu
-Change user if needed, for example:
-```bash
-   su jan
-   ```
-Go to the home directory:
-```bash
-   cd ~
-   ```
+# Workflow modules
+## I Excel to JSON
 Activate the Conda environment:
 ```bash
-   conda activate af3_env
-   ```
+conda activate af3_env
+```
 1.1 Prepare your input sheet in your Excel input file (`af3_input.xlsx`)
-Create a new sheet and update the SimID column and Sheet name
-Add names for your protein chains to the Chain_name columns
-Prepare FASTA files for chains and link FASTA files to Chain_seq columns via right click → link
-Update Ions or other columns if applicable
-Allowed characters for chain names:
-letters
-numbers
-spaces
-dashes
-underscores
-colons
+- Create a new sheet and update the SimID column and Sheet name
+- Add names for your protein chains to the Chain_name columns
+- Prepare FASTA files for chains and link FASTA files to Chain_seq columns via right click → link
+- Update Ions or other columns if applicable. Note that for ions only "Ions" (no ions) or "CA" to calcium ions are supported.
+- Allowed characters for chain names:
+  - letters
+  - numbers
+  - spaces
+  - dashes
+  - underscores
+  - colons
 Batch generation of `.xlsx` input sheets
 ```bash
 python src/_001_batch_excel.py
