@@ -1,0 +1,47 @@
+# ======================= config/0004_20260201_0Ca1AtM2LWRR1CAM2 =======================
+# Module 1: Excel ot JSON
+## Which sheet in af3_input.xlsx to read:
+sheet: "0004_20260201_0Ca1AtM2LWRR1CAM2"
+
+## Name of the JSON you want to produce in input/:
+output_json: "0004_20260201_0Ca1AtM2LWRR1CAM2.json"
+
+## (Optionally) default ion count if you don't list IonCount in Excel:
+default_ion: 0
+
+## (Optionally) model seeds list if needed by your AF3 JSON:
+modelSeeds: []
+
+# Module 2: ChimeraX processing and confidence metrics extraction
+## Add exactly one line that names which .cxc to use for structure processing and visualization of the outputs of this run
+cx_script: Align_allto1_cartoon_gradient.cxc
+### (That file must live under ChimeraX/cx_scripts/AlignB40_cartoon_gradient.cxc)
+
+# MSA
+alignment_algo: clustalo ## Choose from: "auto", "mafft", "clustalo", "muscle", "none"
+# ================================================================================
+WiP1: 8.0
+HiP1: 5.5
+sep: ","
+ItalChars: 0
+
+ProtNames:
+  A: "1710"
+  B: "1711"
+  C: "1712"
+  D: "1701"
+  E: "1702"
+  F: "1703"
+  G: "1704"
+  H: "1705"
+  I: "1706"
+  J: "1707"
+  K: "1708"
+  L: "1709"
+  
+AxisTitle:
+  paste(italic("At"), plain("MLO"), bold("2"), plain("CT LW/RR"), plain("-"), italic("At"), plain("CAM"), bold("2"), plain(", "), bold("0"), plain("Ca")^{"2+"})
+
+FacetTitles:
+  A: 'italic("At")*plain("MLO")*bold("2")*plain("CT LW/RR")'
+  B: 'italic("At")*plain("CAM")*bold("2")'

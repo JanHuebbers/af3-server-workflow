@@ -1,0 +1,58 @@
+# ======================= config/mergemerge job =======================
+## Output folder: ./Mergemerge/<merge_name>/
+merge_name: "AtMLOvsAtEXO70"
+
+## Input merges live in: ./Merge/<merge>/model_confidences.csv
+merges:
+  - "AtMLO_full-length_vs_AtCAM2"
+  - "MergeAtMLO2CTvsAtCAM2"
+  
+# Axis definitions for heatmap
+# Use wildcard patterns matched against the merged table's `mapping` column:
+# - y_axis patterns are typically PREFIX matches like "1atmlo4*"
+# - x_axis patterns are typically SUFFIX matches like "*atcam2"
+y_axis:
+  A:
+    mapping: "1atmlo1*"
+    prot_name: "AtMLO1"
+  B:
+    mapping: "1atmlo2*"
+    prot_name: "AtMLO2"
+  C:
+    mapping: "1atmlo2ct*"
+    prot_name: "AtMLO2CT"
+  D:
+    mapping: "1atmlo2ct_l456r_w459r*"
+    prot_name: "AtMLO2CT LW/RR"
+  E:
+    mapping: "4ca_1atmlo2ct_1atcam2*"
+    prot_name: "AtMLO2CT"
+  F:
+    mapping: "4ca_1atmlo2ct_l456r_w459r*"
+    prot_name: "AtMLO2CT LW/RR"
+
+x_axis:
+  A:
+    mapping: "*1atcam2"
+    prot_name: "AtCAM2"
+  B:
+    mapping: "*1atcam2"
+    prot_name: "AtCAM2"
+  C:
+    mapping: "*1atcam2"
+    prot_name: "AtCAM2"
+  D:
+    mapping: "*1atcam2"
+    prot_name: "AtCAM2"
+  E:
+    mapping: "*1atcam2"
+    prot_name: "AtCAM2"
+  F:
+    mapping: "*1atcam2"
+    prot_name: "AtCAM2"
+
+# Plot options (kept for later R scripts)
+WiP1: 6.5
+HiP1: 5.5
+sep: ","
+ItalChars: 2

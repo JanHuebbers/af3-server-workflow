@@ -1,0 +1,49 @@
+# This ChimeraX script visualizes AF3 simulations with up to 5 chains
+
+#################################################################################################################
+#################################################################################################################
+
+# Perpare environment
+## Background color
+set bgColor white
+## Silhouettes and lighting
+graphics silhouettes true width 1.2 depthJump 0.01
+light soft multishadow 128 intensity 0.0 color #FFFACD fillIntensity -0.0 ambientIntensity 1.5 depthCue false shadows  true
+## Style
+preset cartoons/nucleotides cylinders/stubs
+## Adjust size
+# camera ortho
+# windowsize 1800 800
+# zoom pixel_size 0.2
+# scalebar length 10 thickness 10 color #000000 xpos 0.01 ypos 0.01
+#################################################################################################################
+#################################################################################################################
+
+# Align AF3 models to A
+mm #2-5 to #1
+
+#################################################################################################################
+#################################################################################################################
+
+# Color ribbon
+## Color A gradient
+color byattribute number #1-5/A palette "#4787C2:#8EBAE5"
+## Color B gradient
+color byattribute number #1-5/B palette "#F9BE47:#FDD48F"
+## Color C gradient
+color byattribute number #1-5/C palette "#B74D5E:#E5C5C0"
+## Color D gradient
+color byattribute number #1-5/D palette "#424344:#858788"
+## Color E gradient
+color byattribute number #1-5/E palette "#87C05F:#DDEBCE"
+## Set transparency
+transparency #2-5 50 target csa
+
+#################################################################################################################
+#################################################################################################################
+
+# Clear selection
+select subtract all
+
+#################################################################################################################
+#################################################################################################################

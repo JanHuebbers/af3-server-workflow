@@ -1,0 +1,44 @@
+# ======================= config/merge job =======================
+## Define trivia name for this merge
+merge_name: "AtMLO_full-length_vs_AtCAM2"     # becomes ./Merge/AtMLO_full-length_vs_AtCAM2/model_confidences.csv
+
+## Provide identifiers of runs that you want to merge
+runs:                        # the Run_IDs to merge (strings or ints are fine)
+  - "0001"
+  - "0002"
+
+Samples:
+  A:
+    mapping: "1atmlo1_1atcam2"
+    prot_name: "AtMLO1"
+  B:
+    mapping: "1atmlo2_1atcam2"
+    prot_name: "AtMLO2"
+
+# MSA
+alignment_algo: clustalo ## Choose from: "auto", "mafft", "clustalo", "muscle", "none"
+# Exclude jobs ================================================================================
+exclude:
+  job_ids: []   # drop the first job in every run
+  models:  []      # drop model_index 1 everywhere
+# Plot options ================================================================================
+alpha: 0.01
+WiP1: 3.0
+HiP1: 5.5
+sep: ","
+ItalChars: 2
+
+AxisTitle: |
+  expression(bold("MLO variant"))
+  
+Colors:
+  Box:
+    default: "#FFFFFF"        # one value recycled to all boxes
+  Point:                      # position-wise (1..S); recycled if shorter ("#00B1B7" "#29B3A5" "#53B594" "#7DB783" "#A6B972" "#D0BB61" "#FABE50")
+    - "#A3A235"
+    - "#519D6B"
+    
+  MPoint: # "#0098A1" "#289A86" "#519D6B" "#7BA050" "#A3A235" "#CCA51A" "#F6A800"
+
+    - "#D6D1A4"
+    - "#AFCEB9"
