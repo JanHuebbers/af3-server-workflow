@@ -1,26 +1,26 @@
+# af3-server-workflow
 End-to-end workflow for preparing AlphaFold 3 server inputs and analyzing returned structures, confidence metrics, and for carrying out comparative merges of selected prediction runs.
 
-# Table of contents
-- Overview
-- Features
-- Notes
-- Repository layout
-- Requirements
-- Installation
-- Quick start
-- Workflow modules
-  1. AF3 server input generation
-  2. ChimeraX visualization and confidence metric extraction
-  3. Confidence metric visualization via R
-  4. Merge simulations
-  5. Merge merge
-  6. Align R plots
-- Typical workflow
-- Status
+## Table of contents
+- [Overview](#overview)
+- [Features](#features)
+- [Notes](#notes)
+- [Repository layout](#repository-layout)
+- [Requirements](#requirements)
+- [Installation](#installation)
+- [Workflow modules](#workflow-modules)
+  - [I Excel to JSON](#i-excel-to-json)
+  - [II ChimeraX visualization and confidence metric extraction](#ii-chimerax-visualization-and-confidence-metric-extraction)
+  - [III Confidence metric visualization via R](#iii-confidence-metric-visualization-via-r)
+  - [IV Merge simulations](#iv-merge-simulations)
+  - [V Merge merge (under construction)](#v-merge-merge-under-construction)
+  - [VI Align R plots](#vi-align-r-plots)
+- [Typical workflow](#typical-workflow)
+- [Status](#status)
 
-# Overview
+## Overview
 `af3-server-workflow` is a modular pipeline for preparing AlphaFold 3 prediction runs, processing returned predictions, extracting and visualizing confidence metrics, and comparing results across multiple runs or merged simulation sets. It is designed for Ubuntu _via_ WSL on Windows.
-# Features
+## Features
 - Excel-based preparation of AF3 input definitions
 - JSON generation for AlphaFold 3 submission
 - Residue map and sequence alignment generation
@@ -30,7 +30,7 @@ End-to-end workflow for preparing AlphaFold 3 server inputs and analyzing return
 - Merge workflows across runs
 - Planned merge-of-merges analysis
 - Alignment of exported ggplot `.rds` files for figure assembly
-# Notes
+## Notes
 - This workflow currently assumes a Linux-style environment.
 - Examples are written for Ubuntu on WSL.
 - ChimeraX paths may need manual adjustment in config/global.yml.
@@ -52,8 +52,8 @@ af3-server-workflow/
 ├── setup_af3_folders.sh
 └── src
 ```
-# Requirements
-## System
+## Requirements
+### System
 - Linux environment
 - Conda, Miniconda, or Mamba
 - Python
@@ -64,7 +64,7 @@ af3-server-workflow/
 
 **Recommended environment: Ubuntu or Ubuntu via WSL on Windows.**
 
-# Installation
+## Installation
 1. Clone the repository
 ```bash
 git clone <your-repository-url>
@@ -147,13 +147,13 @@ If the files are missing, copy them into WSL and refresh the font cache:
 sudo mkdir -p /usr/share/fonts/truetype/dejavu
 sudo fc-cache -f -v
 ```
-# Workflow modules
-## I Excel to JSON
-### Activate the Conda environment:
+## Workflow modules
+### I Excel to JSON
+#### Activate the Conda environment:
 ```bash
 conda activate af3_env
 ```
-### Prepare your input sheet in your Excel input file (`af3_input.xlsx`)
+#### Prepare your input sheet in your Excel input file (`af3_input.xlsx`)
 - Create a new sheet and update the SimID column and Sheet name
 - Add names for your protein chains to the Chain_name columns
 - Prepare FASTA files for chains and link FASTA files to Chain_seq columns via right click → link
@@ -165,14 +165,14 @@ conda activate af3_env
   - dashes
   - underscores
   - colons
-### Batch generation of `.xlsx` input sheets
+#### Batch generation of `.xlsx` input sheets
 Modify parameters in _001_batch_excel.yml and execute:
 ```bash
 python src/_001_batch_excel.py
 ```
 Afterwards, copy sheets from `af3_input_temp.xlsx` to `af3_input.xlsx`.
 
-### Update `config.yml`
+#### Update `config.yml`
 - Rename an existing `config.yml` in `af3_workflow/config` using the name of your input Excel sheet
 - Change YAML header and sheet name
 - Update output_json directory
@@ -182,12 +182,12 @@ Afterwards, copy sheets from `af3_input_temp.xlsx` to `af3_input.xlsx`.
 - Adjust height and width for plotting in module 3 (WiP1 and HiP1)
 - Update protein names and x-axis title for P1
   
-### Batch generation of `.yml` config files
+#### Batch generation of `.yml` config files
 Modify parameters in _002_batch_config.yml and execute:
 ```bash
 python src/_002_batch_config.py
 ```
-### Run module 1
+#### Run module 1
 Change into the project folder
 ```bash
 cd ~/projects/af3_workflow/
@@ -206,7 +206,7 @@ Modify parameters in batch_module1.sh and execute from the working directory:
 ```bash
 ./src/shell/batch_module1.sh
 ```
-### Verify output
+#### Verify output
 - Check `input/` for the newly created JSON files
 - Feed these JSONs into your AF3 batch runner, for example the AlphaFold 3 server
 - Download AF3 output, extract files, and copy them into the project folder
@@ -217,8 +217,8 @@ sudo chown -R <user>:<user> ./AF3_output/0001
 rsync -a --no-xattrs /mnt/c/Users/User/Downloads/folds_2026_01_01_00_01/ ~/projects/af3-server-workflow/AF3_output/0001/
 ```
 ---
-## II ChimeraX visualization and confidence metric extraction
-### Run the wrapper for module 2
+### II ChimeraX visualization and confidence metric extraction
+#### Run the wrapper for module 2
 This is exemplary code for test run `0001`.
 ```bash
 python src/_020_run_chimera_confmetr.py Run0001_2026-01-01_test
@@ -227,39 +227,39 @@ python src/_020_run_chimera_confmetr.py Run0001_2026-01-01_test
 - `--avg-only` to skip writing heavy per-model `ContactProbs` and `PAE` sheets
 - `--yes` to answer all prompts with `y`
 ---
-## III Confidence metric visualization via R
-### Run the wrapper for module 3
+### III Confidence metric visualization via R
+#### Run the wrapper for module 3
 ```bash
 python src/_030_run_plot_module.py Run0001_2026-01-01_test
 ```
 ---
-## IV Merge simulations
-### Run the wrapper
+### IV Merge simulations
+#### Run the wrapper
 Runs all scripts in module 4. Use `--yes` to skip prompts.
 ```bash
 export MERGENAME=MyMerge
 python src/_040_run_merge_module.py Merge${MERGENAME} --yes
 ```
-### Run step-wise
-#### Merge MSAs
+#### Run step-wise
+##### Merge MSAs
 Builds a merged multiple sequence alignment (MSA) per chain across selected `run_id`s and writes an alignment map.
 ```bash
 python src/_041_merge_MSA.py Merge${MERGENAME}
 ```
-#### Merge confidence metrics `.csv` files from AF3 output folders
+##### Merge confidence metrics `.csv` files from AF3 output folders
 ```bash
 python src/_042_merge_GlobalMetr.py Merge${MERGENAME}
 ```
-#### Merge per-residue metrics `.xlsx` files from AF3 output folders
+##### Merge per-residue metrics `.xlsx` files from AF3 output folders
 Creates a merged `minScoresperMSA_merged.xlsx` for the merge, where each run contributes one column set per chain containing mean per-residue metrics averaged across seeds/jobs within that run.
 ```bash
 python src/_043_merge_MinMetr.py Merge${MERGENAME}
 ```
-#### Create plots to compare metrics across various runs
+##### Create plots to compare metrics across various runs
 ```bash
 python src/_044_create_merge_plots.py Merge${MERGENAME}
 ```
-### Selection by `--include`
+#### Selection by `--include`
 - Include-only mode is controlled by the boolean CLI flag `--include`.
 - When `--include` is set, the script only keeps rows belonging to the specified `include` jobs. If you list models for a given `job_id`, it keeps only those model indices. If a `job_id` has no models specified, all models for that job are included.
 ```bash
@@ -287,7 +287,7 @@ include:
   model: [[0, 1], []]
 ```
 ---
-## V Merge merge (under construction)
+### V Merge merge (under construction)
 Available:
 - Script 052: combine global confidence metrics `.csv` tables
 - Script 054: create visuals to compare these metrics across merged runs
@@ -305,14 +305,14 @@ python src/_052_mergemerge_GlobalMetr.py Mergemerge${MERGENAME}
 python src/_054_mergemerge_plots.py Mergemerge${MERGENAME}
 ```
 ---
-## IV Align R plots
+### VI Align R plots
 Use `align_rds_plots.R` to align the panel and axes of multiple ggplot objects saved as `.rds` files.
 ```bash
 Rscript ./src/R/align_rds_plots.R <rds_dir> [width_cm] [height_cm]
 ```
 - `<rds_dir>`: directory containing the `.rds` plots
 - `[width_cm]` and `[height_cm]` are optional overrides
-### Examples
+#### Examples
 Use script defaults:
 ```bash
 Rscript ./src/R/align_rds_plots.R ./Mergemerge/MyMerge/AlignHeat_sims/ChainA
@@ -341,7 +341,7 @@ Rscript ./src/R/align_rds_plots.R ./Merge/MyMerge/2026-01-01/ NA 6.0
 
 The aligned SVGs have matching panel and axis geometry, so they can be combined cleanly in Inkscape, Illustrator, or PowerPoint.
 
-# Typical workflow
+## Typical workflow
 - Set up the environment
 - Prepare `af3_input.xlsx`
 - Create or update the matching YAML config
@@ -353,7 +353,7 @@ The aligned SVGs have matching panel and axis geometry, so they can be combined 
 - Run module 4 to compare runs
 - Run module 5 to compare merged runs
 - Optionally use module 6 to align exported ggplot objects
-# Status
+## Status
 - Module 1: active
 - Module 2: active
 - Module 3: active
