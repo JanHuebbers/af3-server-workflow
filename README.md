@@ -525,3 +525,5 @@ The aligned SVGs have matching panel and axis geometry, so they can be combined 
 - Module 4: active
 - Module 5: under construction
 - Module 6: active
+# Acknowledgements
+Special thanks goes to Aurélien and Pablo for testing this workflow and keeping the project alive!
